@@ -47,7 +47,7 @@ interface pdfFile {
   options?: {}
 }
 
-More Info there : https://pptr.dev/#?product=Puppeteer&version=v7.1.0&show=api-pagepdfoptions
+More Info [there](https://pptr.dev/#?product=Puppeteer&version=v7.1.0&show=api-pagepdfoptions)
 interface PDFOptions {
   path?: string,
   scale?: number,
