@@ -10,22 +10,6 @@
   "publishConfig": {
     "@myunisoft:registry": ""
   },
-  "jest": {
-    "setupFilesAfterEnv": [
-      "./jest.setup.js"
-    ],
-    "collectCoverageFrom": [
-      "**/src/*.js"
-    ],
-    "testEnvironment": "node",
-    "testMatch": [
-      "**/test/**/*.js"
-    ],
-    "testPathIgnorePatterns": [
-      "/node_modules/",
-      "/test/fixtures/"
-    ]
-  },
   "files": [
     "dist"
   ],
@@ -35,6 +19,7 @@
   "dependencies": {
     "@koa/cors": "^3.1.0",
     "@types/node": "^14.14.31",
+    "jest": "^26.6.3",
     "koa": "^2.13.1",
     "puppeteer": "^7.1.0",
     "zup": "0.0.1"
