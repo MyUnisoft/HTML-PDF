@@ -58,6 +58,7 @@ interface PDF {
  */
 async function generatePDF(browser: Browser, files: pdfFile[], options?: PDFOptions): Promise<PDF[]> {
   const pdfs = [];
+  let pdf;
 
   try {
     const page = await browser.newPage();
@@ -76,17 +77,18 @@ async function generatePDF(browser: Browser, files: pdfFile[], options?: PDFOpti
         });
       }
 
-      const pdf = JSON.parse(JSON.stringify(file));
+      pdf = JSON.parse(JSON.stringify(file));
       delete pdf['content'];
 
       pdf['options'] = options ?? undefined;
       pdf['buffer'] = await page.pdf(pdf.options);
       pdfs.push(pdf);
     }
+
+    if (pdfs.length === 1) return pdf;
+    else return pdfs;
   } catch (error) {
     throw new Error(error);
-  } finally {
-    return pdfs;
   }
 }
 
