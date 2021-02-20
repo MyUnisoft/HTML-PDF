@@ -10,7 +10,7 @@
     "test": "jest --coverage"
   },
   "publishConfig": {
-    "@myunisoft:registry": ""
+    "registry":"https://npm.pkg.github.com"
   },
   "files": [
     "dist"
