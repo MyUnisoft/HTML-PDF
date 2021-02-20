@@ -1,0 +1,44 @@
+{
+  "name": "@myunisoft/html-to-pdf",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index",
+  "scripts": {
+    "build": "tsc",
+    "test": "jest --coverage"
+  },
+  "publishConfig": {
+    "@myunisoft:registry": ""
+  },
+  "jest": {
+    "setupFilesAfterEnv": [
+      "./jest.setup.js"
+    ],
+    "collectCoverageFrom": [
+      "**/src/*.js"
+    ],
+    "testEnvironment": "node",
+    "testMatch": [
+      "**/test/**/*.js"
+    ],
+    "testPathIgnorePatterns": [
+      "/node_modules/",
+      "/test/fixtures/"
+    ]
+  },
+  "files": [
+    "dist"
+  ],
+  "keywords": [],
+  "author": "HALLAERT Nicolas <nicolas.hallaert.pro@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "@koa/cors": "^3.1.0",
+    "koa": "^2.13.1",
+    "puppeteer": "^7.1.0",
+    "zup": "0.0.1"
+  },
+  "devDependencies": {
+    "types/node": "^14.14.7"
+  }
+}
