@@ -1,8 +1,0 @@
-{
-    "extends": "@myunisoft/eslint-config",
-    "parserOptions": {
-      "ecmaVersion": 2021,
-      "sourceType": "module"
-    }
-  }
-  

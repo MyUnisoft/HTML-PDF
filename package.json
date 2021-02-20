@@ -1,16 +1,16 @@
 {
-  "name": "@rossb0b/html-to-pdf",
+  "name": "html-to-pdf",
   "version": "1.0.0",
-  "repository": "git+https://github.com/Rossb0b/nHTMLToPDF",
-  "description": "",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Rossb0b/nHTMLToPDF.git"
+  },
+  "description": "Node lib for converts HTML with dynamic or static content or url to PDF files",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "tsc",
     "test": "jest --coverage"
-  },
-  "publishConfig": {
-    "registry":"https://npm.pkg.github.com"
   },
   "files": [
     "dist"
@@ -26,5 +26,12 @@
   },
   "devDependencies": {
     "types/node": "^14.14.7"
+  },
+  "bugs": {
+    "url": "https://github.com/Rossb0b/nHTMLToPDF/issues"
+  },
+  "homepage": "https://github.com/Rossb0b/nHTMLToPDF#readme",
+  "directories": {
+    "test": "test"
   }
 }
