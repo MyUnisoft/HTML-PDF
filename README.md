@@ -1,8 +1,12 @@
 # nHTMLToPDF
-Node lib for converts HTML or url to PDF file
+Node lib for converts HTML with dynamic or static content or url to PDF files
 
 ## Installation
 - Coming soon
+
+## Unit Test
+- Jest
+- Coverage : 90%
 
 ## Usage
 
@@ -95,7 +99,3 @@ async function main() {
 }
 main().catch(console.error);
 ```
-
-
-##### Incoming
-- TU
