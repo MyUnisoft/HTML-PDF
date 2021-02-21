@@ -15,7 +15,12 @@
   "files": [
     "dist"
   ],
-  "keywords": [],
+  "keywords": [
+    "node",
+    "html",
+    "pdf",
+    "parser"
+  ],
   "author": "HALLAERT Nicolas <nicolas.hallaert.pro@gmail.com>",
   "license": "MIT",
   "dependencies": {
