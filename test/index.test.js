@@ -110,7 +110,7 @@ describe('convert html to pdf', () => {
 
   it('should return a Buffer for a HTML converted in pdf', async () => {
     try {
-      const pdf = await compiler.generatePDF(browser, [{ content: template }]);
+      const pdf = await compiler.generatePDF(browser, [{ content: template }], { scale: 2 });
       expect(pdf.buffer).toBeInstanceOf(Buffer);
     } catch (error) {
       throw new Error(error);
