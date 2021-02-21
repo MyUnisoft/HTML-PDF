@@ -24,10 +24,12 @@
   "author": "HALLAERT Nicolas <nicolas.hallaert.pro@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "@types/node": "^14.14.31",
-    "jest": "^26.6.3",
     "puppeteer": "^7.1.0",
     "zup": "0.0.1"
+  },
+  "devDependencies": {
+    "@types/node": "^14.14.31",
+    "jest": "^26.6.3"
   },
   "bugs": {
     "url": "https://github.com/Rossb0b/nHTMLToPDF/issues"
