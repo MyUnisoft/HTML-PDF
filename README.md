@@ -2,7 +2,7 @@
 Node lib for converts HTML with dynamic or static content or url to PDF files
 
 ## Installation
-```$ npm install @rossbob/html-to-pdf@1.0.0```
+```$ npm install @rossbob/html-to-pdf```
 
 ## Unit Test
 - Jest
