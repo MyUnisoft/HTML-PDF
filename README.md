@@ -100,3 +100,5 @@ async function main() {
 }
 main().catch(console.error);
 ```
+
+### How to use [Zup](https://github.com/mscdex/zup)
