@@ -14,10 +14,18 @@ Node lib for converts HTML with dynamic or static content or url to PDF files
 async function main() {
   try {
     const browser = await pdf.initBrowser();
-    const result1 = await pdf.generatePDF(browser, files);
+    const pdfs = await pdf.generatePDF(browser, files);
+    const pdf = await pdf.generatePDF(browser, file);
+
     const stream = await fs.createWriteStream(`./${your_pdf_name}.pdf`);
-    await stream.write(result1[0].buffer);
-    await pdf.terminateBrowser
+
+    await stream.write(pdf.buffer); // => create file for the given buffer.
+    
+    for (let file of pdfs) {
+      await stream.write(file.buffer); // => create file for each given buffer
+    }
+
+    await pdf.terminateBrowser;
   } catch (error) {
     throw new Error(error);
   }
