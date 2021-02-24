@@ -106,7 +106,3 @@ export async function terminateBrowser(browser: Browser): Promise<void> {
 
   return;
 }
-
-// module.exports.generatePDF = generatePDF;
-// module.exports.initBrowser = initBrowser;
-// module.exports.terminateBrowser = terminateBrowser;
