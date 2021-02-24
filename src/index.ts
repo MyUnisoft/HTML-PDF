@@ -1,5 +1,7 @@
+// Require third part Dependencies
 import { Browser } from "puppeteer";
 import * as puppeteer from "puppeteer";
+import * as fs from "fs";
 const compile = require('zup');
 
 /**
@@ -9,7 +11,8 @@ const compile = require('zup');
 export async function initBrowser(): Promise<Browser> {
   try {
     return await puppeteer.launch();
-  } catch (error) {
+  }
+  catch (error) {
     throw new Error(error);
   }
 }
@@ -50,19 +53,29 @@ interface PDF {
  * @author HALLAERT Nicolas
  * @description Return a buffer of generated pdfs with the payload of options used
  *
+ * @export
  * @param {Browser} browser
  * @param {pdfFile[]} files
  * @param {PDFOptions} [options]
+ * @param {boolean} [toStream=false]
  * @returns {Promise<PDF[]>}
  */
-export async function generatePDF(browser: Browser, files: pdfFile[], options?: PDFOptions): Promise<PDF[]> {
+export async function generatePDF(browser: Browser, files: pdfFile[], options?: PDFOptions, toStream: boolean = false): Promise<PDF[] | fs.WriteStream> {
   const pdfs = [];
   let pdf;
+
+  if (toStream && files.length > 1) {
+    throw new Error("Cannot handle stream for multiple files");
+  }
 
   try {
     const page = await browser.newPage();
 
     for (let file of files) {
+      pdf = JSON.parse(JSON.stringify(file));
+      pdf['options'] = options ?? undefined;
+      delete pdf['content'];
+
       if (file.content) {
         const template = compile(file.content);
         const html = template(file?.options ?? {});
@@ -70,23 +83,38 @@ export async function generatePDF(browser: Browser, files: pdfFile[], options?: 
         await page.setContent(html, {
             waitUntil: 'networkidle0'
         });
-      } else {
+      }
+      else {
         await page.goto(file.url!, {
             waitUntil: 'networkidle0'
         });
       }
 
-      pdf = JSON.parse(JSON.stringify(file));
-      delete pdf['content'];
+      if (toStream) {
+        const buffer = await page.pdf(pdf.options);
+        await terminateBrowser(browser);
 
-      pdf['options'] = options ?? undefined;
+        const stream = fs.createWriteStream('generated.pdf');
+        stream.write(buffer);
+
+        stream.on('end', () => {
+          fs.unlink('generated.pdf', (error) => {
+            if (error) throw new Error(error.code);
+          })
+        })
+
+        return stream;
+      }
+
+
       pdf['buffer'] = await page.pdf(pdf.options);
       pdfs.push(pdf);
     }
 
     if (pdfs.length === 1) return pdf;
     else return pdfs;
-  } catch (error) {
+  }
+  catch (error) {
     throw new Error(error);
   }
 }
@@ -100,7 +128,8 @@ export async function generatePDF(browser: Browser, files: pdfFile[], options?: 
 export async function terminateBrowser(browser: Browser): Promise<void> {
   try {
     await browser.close();
-  } catch (error) {
+  }
+  catch (error) {
     throw new Error(error);
   }
 
