@@ -6,7 +6,7 @@ Node lib for converts HTML with dynamic or static content or url to PDF files
 
 ## Unit Test
 - Jest
-- Coverage : 90%
+- Coverage : 100%
 
 ## Usage
 
