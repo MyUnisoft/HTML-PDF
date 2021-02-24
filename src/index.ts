@@ -2,12 +2,11 @@ import { Browser } from "puppeteer";
 import * as puppeteer from "puppeteer";
 const compile = require('zup');
 
-module.exports
 /**
  * @author HALLAERT Nicolas
  * @returns {Promise<Browser>}
  */
-async function initBrowser(): Promise<Browser> {
+export async function initBrowser(): Promise<Browser> {
   try {
     return await puppeteer.launch();
   } catch (error) {
@@ -56,7 +55,7 @@ interface PDF {
  * @param {PDFOptions} [options]
  * @returns {Promise<PDF[]>}
  */
-async function generatePDF(browser: Browser, files: pdfFile[], options?: PDFOptions): Promise<PDF[]> {
+export async function generatePDF(browser: Browser, files: pdfFile[], options?: PDFOptions): Promise<PDF[]> {
   const pdfs = [];
   let pdf;
 
@@ -98,7 +97,7 @@ async function generatePDF(browser: Browser, files: pdfFile[], options?: PDFOpti
  * @param {Browser} browser
  * @returns {Promise<void>}
  */
-async function terminateBrowser(browser: Browser): Promise<void> {
+export async function terminateBrowser(browser: Browser): Promise<void> {
   try {
     await browser.close();
   } catch (error) {
@@ -108,6 +107,6 @@ async function terminateBrowser(browser: Browser): Promise<void> {
   return;
 }
 
-module.exports.generatePDF = generatePDF;
-module.exports.initBrowser = initBrowser;
-module.exports.terminateBrowser = terminateBrowser;
+// module.exports.generatePDF = generatePDF;
+// module.exports.initBrowser = initBrowser;
+// module.exports.terminateBrowser = terminateBrowser;
