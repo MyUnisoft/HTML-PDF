@@ -59,7 +59,7 @@ async function main() {
 main().catch(console.error);
 ```
 
-### generatePDF(browser: Browser, files: pdfFile[], options?: PDFOPtions, toStream: boolean = false): Promise<PDF[] | fs.ReadStream>
+### generatePDF(browser: Browser, files: pdfFile[], options?: PDFOPtions, toStream: boolean = false): Promise<PDF[] | PDF | fs.ReadStream>
 
 ```ts
 interface pdfFile {
