@@ -58,7 +58,7 @@ interface PDF {
  * @param {pdfFile[]} files
  * @param {PDFOptions} [options]
  * @param {boolean} [toStream=false]
- * @returns {Promise<PDF[]>}
+ * @returns {Promise<PDF[] | PDF | fs.ReadStream>}
  */
 export async function generatePDF(browser: Browser, files: pdfFile[], options?: PDFOptions, toStream: boolean = false): Promise<PDF[] | PDF | fs.ReadStream> {
   const pdfs = [];
