@@ -107,15 +107,15 @@ export async function generatePDF(browser: Browser, files: pdfFile[], options?: 
           })
         })
 
-        return readableStream;
+        return readableStream as fs.ReadStream;
       }
 
       pdf['buffer'] = await page.pdf(pdf.options);
       pdfs.push(pdf);
     }
 
-    if (pdfs.length === 1) return pdf;
-    else return pdfs;
+    if (pdfs.length === 1) return pdf as PDF;
+    else return pdfs as PDF[];
   }
   catch (error) {
     throw new Error(error);
