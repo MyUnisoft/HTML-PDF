@@ -12,20 +12,33 @@ Node lib for converts HTML with dynamic or static content or url to PDF files
 
 ```js
 async function main() {
+  let pdfToStream = false;
+
   try {
     const browser = await pdf.initBrowser();
-    const pdfs = await pdf.generatePDF(browser, files);
-    const pdf = await pdf.generatePDF(browser, file);
-
-    const stream = await fs.createWriteStream(`./${your_pdf_name}.pdf`);
-
-    await stream.write(pdf.buffer); // => create file for the given buffer.
     
-    for (let file of pdfs) {
-      await stream.write(file.buffer); // => create file for each given buffer
-    }
+    if (!pdfToStream) {
+      const generatedPdfs = await pdf.generatePDF(browser, files);
+      const generatedPdf = await pdf.generatePDF(browser, file);
 
-    await pdf.terminateBrowser;
+      const stream = fs.createWriteStream(`./${your_pdf_name}.pdf`);
+
+      stream.write(generatedPdf.buffer); // => create file for the given buffer.
+      
+      for (let file of generatedPdfs) {
+        stream.write(file.buffer); // => create file for each given buffer
+      }
+
+      await pdf.terminateBrowser;
+
+      // ...
+    }
+    else {
+      const stream = await pdf.generatePDF(browser, files, {}, true);
+      stream.pipe(process.stdout, { end: false });
+
+      // ...
+    } 
   } catch (error) {
     throw new Error(error);
   }
@@ -46,7 +59,7 @@ async function main() {
 main().catch(console.error);
 ```
 
-### generatePDF(browser: Browser, files: pdfFile[], options?: PDFOPtions): Promise<PDF[]>
+### generatePDF(browser: Browser, files: pdfFile[], options?: PDFOPtions, toStream: boolean = false): Promise<PDF[] | fs.ReadStream>
 
 ```ts
 interface pdfFile {
@@ -87,7 +100,7 @@ interface PDF {
 async function main() {
   try {
     const browser = await pdf.initBrowser();
-    const result1 = await pdf.generatePDF(browser, files);
+    const result = await pdf.generatePDF(browser, files);
   } catch (error) {
     throw new Error(error);
   }
