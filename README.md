@@ -18,9 +18,9 @@ async function main() {
     const browser = await pdf.initBrowser();
     
     if (!pdfToStream) {
-      const generatedPdfs = await pdf.generatePDF(browser, files);
+      let generatedPdfs = await pdf.generatePDF(browser, files);
       generatedPdfs = generatedPdfs.pdfs;
-      const generatedPdf = await pdf.generatePDF(browser, file);
+      let generatedPdf = await pdf.generatePDF(browser, file);
       generatedPdf = generatedPdf.pdf;
 
       const stream = fs.createWriteStream(`./${your_pdf_name}.pdf`);
