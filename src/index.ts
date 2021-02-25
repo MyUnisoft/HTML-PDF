@@ -60,7 +60,7 @@ interface PDF {
  * @param {boolean} [toStream=false]
  * @returns {Promise<PDF[]>}
  */
-export async function generatePDF(browser: Browser, files: pdfFile[], options?: PDFOptions, toStream: boolean = false): Promise<PDF[] | fs.WriteStream> {
+export async function generatePDF(browser: Browser, files: pdfFile[], options?: PDFOptions, toStream: boolean = false): Promise<PDF[] | fs.ReadStream> {
   const pdfs = [];
   let pdf;
 
@@ -74,17 +74,19 @@ export async function generatePDF(browser: Browser, files: pdfFile[], options?: 
     for (let file of files) {
       pdf = JSON.parse(JSON.stringify(file));
       pdf['options'] = options ?? undefined;
-      delete pdf['content'];
 
       if (file.content) {
         const template = compile(file.content);
         const html = template(file?.options ?? {});
+        delete pdf['content'];
 
         await page.setContent(html, {
-            waitUntil: 'networkidle0'
+          waitUntil: 'networkidle0'
         });
       }
       else {
+        delete pdf['url'];
+
         await page.goto(file.url!, {
             waitUntil: 'networkidle0'
         });
@@ -94,18 +96,19 @@ export async function generatePDF(browser: Browser, files: pdfFile[], options?: 
         const buffer = await page.pdf(pdf.options);
         await terminateBrowser(browser);
 
-        const stream = fs.createWriteStream('generated.pdf');
-        stream.write(buffer);
+        const writableStream = fs.createWriteStream('generated.pdf');
+        writableStream.write(buffer);
 
-        stream.on('end', () => {
+        const readableStream = fs.createReadStream('generated.pdf');
+
+        readableStream.on('end', () => {
           fs.unlink('generated.pdf', (error) => {
             if (error) throw new Error(error.code);
           })
         })
 
-        return stream;
+        return readableStream;
       }
-
 
       pdf['buffer'] = await page.pdf(pdf.options);
       pdfs.push(pdf);
