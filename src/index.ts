@@ -60,7 +60,7 @@ interface PDF {
  * @param {boolean} [toStream=false]
  * @returns {Promise<PDF[]>}
  */
-export async function generatePDF(browser: Browser, files: pdfFile[], options?: PDFOptions, toStream: boolean = false): Promise<PDF[] | fs.ReadStream> {
+export async function generatePDF(browser: Browser, files: pdfFile[], options?: PDFOptions, toStream: boolean = false): Promise<PDF[] | PDF | fs.ReadStream> {
   const pdfs = [];
   let pdf;
 
