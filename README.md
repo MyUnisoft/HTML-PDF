@@ -19,14 +19,16 @@ async function main() {
     
     if (!pdfToStream) {
       const generatedPdfs = await pdf.generatePDF(browser, files);
+      generatedPdfs = generatedPdfs.pdfs;
       const generatedPdf = await pdf.generatePDF(browser, file);
+      generatedPdf = generatedPdf.pdf;
 
       const stream = fs.createWriteStream(`./${your_pdf_name}.pdf`);
 
       stream.write(generatedPdf.buffer); // => create file for the given buffer.
       
-      for (let file of generatedPdfs) {
-        stream.write(file.buffer); // => create file for each given buffer
+      for (let generatedPdf of generatedPdfs) {
+        stream.write(generatedPdf.buffer); // => create file for each given buffer
       }
 
       await pdf.terminateBrowser;
@@ -34,7 +36,8 @@ async function main() {
       // ...
     }
     else {
-      const stream = await pdf.generatePDF(browser, files, {}, true);
+      const res = await pdf.generatePDF(browser, files, {}, true);
+      const stream = res.stream;
       stream.pipe(process.stdout, { end: false });
 
       // ...
@@ -59,7 +62,7 @@ async function main() {
 main().catch(console.error);
 ```
 
-### generatePDF(browser: Browser, files: pdfFile[], options?: PDFOPtions, toStream: boolean = false): Promise<PDF[] | PDF | fs.ReadStream>
+### generatePDF(browser: Browser, files: pdfFile[], options?: PDFOPtions, toStream: boolean = false): Promise<genPDFPayload>
 
 ```ts
 interface pdfFile {
@@ -93,6 +96,12 @@ interface PDFOptions {
 interface PDF {
   options?: string,
   buffer: Buffer
+}
+
+interface genPDFPayload {
+  pdf?: PDF,
+  pdfs?: PDF[],
+  stream?: fs.ReadStream
 }
 ```
 

@@ -17,13 +17,13 @@ export async function initBrowser(): Promise<Browser> {
   }
 }
 
-interface pdfFile {
+export interface pdfFile {
   content?: string,
   url?: string,
   options?: {}
 }
 
-interface PDFOptions {
+export interface PDFOptions {
   path?: string,
   scale?: number,
   displayHeaderFooter?: boolean,
@@ -44,9 +44,15 @@ interface PDFOptions {
   preferCSSPageSize?: boolean
 }
 
-interface PDF {
+export interface PDF {
   options?: string,
   buffer: Buffer
+}
+
+export interface genPDFPayload {
+  pdf?: PDF,
+  pdfs?: PDF[],
+  stream?: fs.ReadStream
 }
 
 /**
@@ -58,11 +64,12 @@ interface PDF {
  * @param {pdfFile[]} files
  * @param {PDFOptions} [options]
  * @param {boolean} [toStream=false]
- * @returns {Promise<PDF[] | PDF | fs.ReadStream>}
+ * @returns {Promise<genPDFPayload>}
  */
-export async function generatePDF(browser: Browser, files: pdfFile[], options?: PDFOptions, toStream: boolean = false): Promise<PDF[] | PDF | fs.ReadStream> {
+export async function generatePDF(browser: Browser, files: pdfFile[], options?: PDFOptions, toStream: boolean = false): Promise<genPDFPayload> {
   const pdfs = [];
   let pdf;
+  let res: genPDFPayload = {};
 
   if (toStream && files.length > 1) {
     throw new Error("Cannot handle stream for multiple files");
@@ -107,15 +114,25 @@ export async function generatePDF(browser: Browser, files: pdfFile[], options?: 
           })
         })
 
-        return readableStream as fs.ReadStream;
+        res['stream'] = readableStream as fs.ReadStream;
+
+        return res;
       }
 
       pdf['buffer'] = await page.pdf(pdf.options);
       pdfs.push(pdf);
     }
 
-    if (pdfs.length === 1) return pdf as PDF;
-    else return pdfs as PDF[];
+    if (pdfs.length === 1) {
+      res['pdf'] = pdf as PDF;
+
+      return res;
+    }
+    else {
+      res['pdfs'] = pdfs as PDF[];
+
+      return res;
+    }
   }
   catch (error) {
     throw new Error(error);
