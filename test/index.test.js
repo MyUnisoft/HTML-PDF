@@ -90,10 +90,10 @@ describe('convert html to pdf', () => {
   })
   it('should return a Buffer for a file converted in pdf', async () => {
     try {
-      const pdf = await compiler.generatePDF(browser, [{ content: file, options: opts }]);
+      const res = await compiler.generatePDF(browser, [{ content: file, options: opts }]);
       const stream = fs.createWriteStream("./test.pdf");
-      stream.write(pdf.buffer);
-      expect(pdf.buffer).toBeInstanceOf(Buffer);
+      stream.write(res.pdf.buffer);
+      expect(res.pdf.buffer).toBeInstanceOf(Buffer);
     } catch (error) {
       throw new Error(error);
     }
@@ -101,8 +101,8 @@ describe('convert html to pdf', () => {
 
   it('should return a Buffer for an url converted in pdf', async () => {
     try {
-      const pdf = await compiler.generatePDF(browser, [{ url: "https://nodejs.org/en/" }]);
-      expect(pdf.buffer).toBeInstanceOf(Buffer);
+      const res = await compiler.generatePDF(browser, [{ url: "https://nodejs.org/en/" }]);
+      expect(res.pdf.buffer).toBeInstanceOf(Buffer);
     } catch (error) {
       throw new Error(error);
     }
@@ -110,8 +110,8 @@ describe('convert html to pdf', () => {
 
   it('should return a Buffer for a HTML converted in pdf', async () => {
     try {
-      const pdf = await compiler.generatePDF(browser, [{ content: template }], { scale: 2 });
-      expect(pdf.buffer).toBeInstanceOf(Buffer);
+      const res = await compiler.generatePDF(browser, [{ content: template }], { scale: 2 });
+      expect(res.pdf.buffer).toBeInstanceOf(Buffer);
     } catch (error) {
       throw new Error(error);
     }
@@ -119,8 +119,8 @@ describe('convert html to pdf', () => {
 
   it('should return a Buffer for each type of entry converted in pdf', async () => {
     try {
-      const pdfs = await compiler.generatePDF(browser, files = [{ content: template }, { url: "https://nodejs.org/en/" }])
-      for (let pdf of pdfs) {
+      const res = await compiler.generatePDF(browser, files = [{ content: template }, { url: "https://nodejs.org/en/" }])
+      for (let pdf of res.pdfs) {
         expect(pdf.buffer).toBeInstanceOf(Buffer);
       }
     } catch (error) {
