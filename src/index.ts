@@ -9,12 +9,7 @@ const compile = require('zup');
  * @returns {Promise<Browser>}
  */
 export async function initBrowser(): Promise<Browser> {
-  try {
-    return await puppeteer.launch();
-  }
-  catch (error) {
-    throw new Error(error);
-  }
+  return await puppeteer.launch();
 }
 
 export interface pdfFile {
@@ -125,18 +120,16 @@ export async function generatePDF(browser: Browser, files: pdfFile[], options?: 
 
     if (pdfs.length === 1) {
       res['pdf'] = pdf as PDF;
-
-      return res;
     }
     else {
       res['pdfs'] = pdfs as PDF[];
-
-      return res;
     }
   }
   catch (error) {
-    throw new Error(error);
+    console.error(error);
   }
+
+  return res;
 }
 
 /**
@@ -146,12 +139,7 @@ export async function generatePDF(browser: Browser, files: pdfFile[], options?: 
  * @returns {Promise<void>}
  */
 export async function terminateBrowser(browser: Browser): Promise<void> {
-  try {
-    await browser.close();
-  }
-  catch (error) {
-    throw new Error(error);
-  }
+  await browser.close();
 
   return;
 }
