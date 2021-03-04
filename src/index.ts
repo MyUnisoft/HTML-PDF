@@ -71,6 +71,8 @@ export async function generatePDF(browser: Browser, files: pdfFile[], options?: 
   }
 
   try {
+    if(!browser) browser = await puppeteer.launch();
+
     const page = await browser.newPage();
 
     for (let file of files) {
