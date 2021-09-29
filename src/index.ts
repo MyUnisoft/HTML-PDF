@@ -46,8 +46,7 @@ export interface PDF {
 
 export interface genPDFPayload {
   pdf?: PDF,
-  pdfs?: PDF[],
-  stream?: fs.ReadStream
+  pdfs?: PDF[]
 }
 
 /**
