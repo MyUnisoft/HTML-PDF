@@ -1,6 +1,12 @@
-const compiler = require("../dist/index.js");
-const fs = require('fs');
-const file = fs.readFileSync('./test/sample.html', 'utf-8');
+// Import Node.js Dependencies
+import path from "path";
+import fs from "fs";
+
+// Import Internal Dependencies
+import * as compiler from "../src/index";
+
+// CONST
+const file = fs.readFileSync(path.join(__dirname, "fixtures", "sample.html"), 'utf-8');
 
 const opts = {
   persons: [
@@ -81,13 +87,6 @@ describe('convert html to pdf', () => {
     browser = await compiler.initBrowser();
   })
 
-  it('should throw error if file dosn\'t have prop content or url as string', async () => {
-    try {
-      await compiler.generatePDF(browser, [{ content: true }]);
-    } catch (error) {
-      expect(error).toBeDefined();
-    }
-  })
   it('should return a Buffer for a file converted in pdf', async () => {
     try {
       const res = await compiler.generatePDF(browser, [{ content: file, options: opts }]);
@@ -119,7 +118,7 @@ describe('convert html to pdf', () => {
 
   it('should return a Buffer for each type of entry converted in pdf', async () => {
     try {
-      const res = await compiler.generatePDF(browser, files = [{ content: template }, { url: "https://nodejs.org/en/" }])
+      const res = await compiler.generatePDF(browser, [{ content: template }, { url: "https://nodejs.org/en/" }])
       for (let pdf of res.pdfs) {
         expect(pdf.buffer).toBeInstanceOf(Buffer);
       }
