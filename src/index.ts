@@ -1,7 +1,7 @@
 // Require third part Dependencies
 import { Browser } from "puppeteer";
-import * as puppeteer from "puppeteer";
-import * as fs from "fs";
+import puppeteer from "puppeteer";
+import fs from "fs";
 const compile = require('zup');
 
 /**
@@ -61,14 +61,10 @@ export interface genPDFPayload {
  * @param {boolean} [toStream=false]
  * @returns {Promise<genPDFPayload>}
  */
-export async function generatePDF(browser: Browser, files: pdfFile[], options?: PDFOptions, toStream: boolean = false): Promise<genPDFPayload> {
+export async function generatePDF(browser: Browser, files: pdfFile[], options?: PDFOptions): Promise<genPDFPayload> {
   const pdfs = [];
   let pdf;
   let res: genPDFPayload = {};
-
-  if (toStream && files.length > 1) {
-    throw new Error("Cannot handle stream for multiple files");
-  }
 
   try {
     if(!browser) browser = await puppeteer.launch();
@@ -94,26 +90,6 @@ export async function generatePDF(browser: Browser, files: pdfFile[], options?: 
         await page.goto(file.url!, {
             waitUntil: 'networkidle0'
         });
-      }
-
-      if (toStream) {
-        const buffer = await page.pdf(pdf.options);
-        await terminateBrowser(browser);
-
-        const writableStream = fs.createWriteStream('generated.pdf');
-        writableStream.write(buffer);
-
-        const readableStream = fs.createReadStream('generated.pdf');
-
-        readableStream.on('end', () => {
-          fs.unlink('generated.pdf', (error) => {
-            if (error) throw new Error(error.code);
-          })
-        })
-
-        res['stream'] = readableStream as fs.ReadStream;
-
-        return res;
       }
 
       pdf['buffer'] = await page.pdf(pdf.options);
