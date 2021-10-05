@@ -4,6 +4,9 @@ import puppeteer from "puppeteer";
 import fs from "fs";
 const compile = require('zup');
 
+
+export type PuppeteerBrowser = Browser;
+
 /**
  * @author HALLAERT Nicolas
  * @returns {Promise<Browser>}
