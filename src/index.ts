@@ -86,12 +86,15 @@ export async function generatePDF(browser: Browser, files: pdfFile[], options?: 
           waitUntil: 'networkidle0'
         });
       }
-      else {
+      else if(file.url) {
         delete pdf['url'];
 
-        await page.goto(file.url!, {
+        await page.goto(file.url, {
             waitUntil: 'networkidle0'
         });
+      }
+      else {
+        continue;
       }
 
       pdf['buffer'] = await page.pdf(pdf.options);
