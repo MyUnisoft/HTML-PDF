@@ -6,6 +6,7 @@
       "outDir": "./dist",
       "moduleResolution": "node",
       "baseUrl": "./src",
+      "declaration": true,
       "paths": {
         "#src/*": ["./src/*"]
       },
