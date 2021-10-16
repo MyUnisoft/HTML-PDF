@@ -1,7 +1,17 @@
 module.exports = {
   preset: "ts-jest",
   testEnvironment: "node",
-  moduleNameMapper: {
-    "^#src/(.*)$": "<rootDir>/src/$1"
-  }
+  collectCoverage: true,
+  collectCoverageFrom: [
+    "**/src/**/*.ts"
+  ],
+  testEnvironment: "node",
+  testMatch: [
+    "**/test/**/*.test.ts"
+  ],
+  testPathIgnorePatterns: [
+    "/coverage/",
+    "/node_modules/",
+    "/test/fixtures/"
+  ]
 };
