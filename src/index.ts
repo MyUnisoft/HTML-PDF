@@ -1,7 +1,6 @@
 // Require third part Dependencies
 import { Browser } from "puppeteer";
-import puppeteer from "puppeteer";
-import fs from "fs";
+import puppeteer from "puppeteer"
 const compile = require('zup');
 
 
@@ -68,48 +67,45 @@ export async function generatePDF(browser: Browser, files: pdfFile[], options?: 
   let pdf;
   let res: genPDFPayload = {};
 
-  try {
-    if(!browser) browser = await puppeteer.launch();
+  if(!browser) {
+    browser = await puppeteer.launch();
+  }
 
-    const page = await browser.newPage();
+  const page = await browser.newPage();
 
-    for (let file of files) {
-      pdf = JSON.parse(JSON.stringify(file));
-      pdf['options'] = options ?? undefined;
+  for (const file of files) {
+    pdf = JSON.parse(JSON.stringify(file));
+    pdf['options'] = options ?? undefined;
 
-      if (file.content) {
-        const template = compile(file.content);
-        const html = template(file?.options ?? {});
-        delete pdf['content'];
+    if (file.content) {
+      const template = compile(file.content);
+      const html = template(file?.options ?? {});
+      delete pdf['content'];
 
-        await page.setContent(html, {
-          waitUntil: 'networkidle0'
-        });
-      }
-      else if(file.url) {
-        delete pdf['url'];
-
-        await page.goto(file.url, {
-            waitUntil: 'networkidle0'
-        });
-      }
-      else {
-        continue;
-      }
-
-      pdf['buffer'] = await page.pdf(pdf.options);
-      pdfs.push(pdf);
+      await page.setContent(html, {
+        waitUntil: 'networkidle0'
+      });
     }
+    else if(file.url) {
+      delete pdf['url'];
 
-    if (pdfs.length === 1) {
-      res['pdf'] = pdf as PDF;
+      await page.goto(file.url, {
+          waitUntil: 'networkidle0'
+      });
     }
     else {
-      res['pdfs'] = pdfs as PDF[];
+      continue;
     }
+
+    pdf['buffer'] = await page.pdf(pdf.options);
+    pdfs.push(pdf);
   }
-  catch (error) {
-    console.error(error);
+
+  if (pdfs.length === 1) {
+    res['pdf'] = pdf as PDF;
+  }
+  else {
+    res['pdfs'] = pdfs as PDF[];
   }
 
   return res;
