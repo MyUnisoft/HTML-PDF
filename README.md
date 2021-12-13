@@ -12,40 +12,25 @@ Node lib for converts HTML with dynamic or static content or url to PDF files
 
 ```js
 async function main() {
-  let pdfToStream = false;
+  const browser = await initBrowser();
 
   try {
-    const browser = await pdf.initBrowser();
+    const { pdfs } = await generatePDF(browser, files);
+    const { pdf } = await generatePDF(browser, file);
+
+    const stream = fs.createWriteStream(`./${your_pdf_name}.pdf`);
+
+    stream.write(pdf.buffer); // => create file for the given buffer.
     
-    if (!pdfToStream) {
-      let generatedPdfs = await pdf.generatePDF(browser, files);
-      generatedPdfs = generatedPdfs.pdfs;
-      let generatedPdf = await pdf.generatePDF(browser, file);
-      generatedPdf = generatedPdf.pdf;
-
-      const stream = fs.createWriteStream(`./${your_pdf_name}.pdf`);
-
-      stream.write(generatedPdf.buffer); // => create file for the given buffer.
-      
-      for (let generatedPdf of generatedPdfs) {
-        stream.write(generatedPdf.buffer); // => create file for each given buffer
-      }
-
-      await pdf.terminateBrowser;
-
-      // ...
+    for (let pdf of pdfs) {
+      stream.write(pdf.buffer); // => create file for each given buffer
     }
-    else {
-      const res = await pdf.generatePDF(browser, files, {}, true);
-      const stream = res.stream;
-      stream.pipe(process.stdout, { end: false });
-
-      // ...
-    } 
-  } catch (error) {
-    throw new Error(error);
+  }
+  finally {
+    await terminateBrowser(browser);
   }
 }
+
 main().catch(console.error);
 ```
 
@@ -53,16 +38,12 @@ main().catch(console.error);
 
 ```js
 async function main() {
-  try {
-    const browser = await pdf.initProcess();
-  } catch (error) {
-    throw new Error(error);
-  }
+  const browser = await initBrowser();
 }
 main().catch(console.error);
 ```
 
-### generatePDF(browser: Browser, files: pdfFile[], options?: PDFOPtions, toStream: boolean = false): Promise<genPDFPayload>
+### generatePDF(browser: Browser, files: pdfFile[], options?: PDFOPtions): Promise<genPDFPayload>
 
 ```ts
 interface pdfFile {
@@ -107,12 +88,8 @@ interface genPDFPayload {
 
 ```js
 async function main() {
-  try {
-    const browser = await pdf.initBrowser();
-    const result = await pdf.generatePDF(browser, files);
-  } catch (error) {
-    throw new Error(error);
-  }
+  const browser = await initBrowser();
+  const result = await generatePDF(browser, files);
 }
 main().catch(console.error);
 ```
@@ -121,12 +98,8 @@ main().catch(console.error);
 
 ```js
 async function main() {
-  try {
-    const browser = await pdf.initBrowser();
-    await pdf.terminateBrowser
-  } catch (error) {
-    throw new Error(error);
-  }
+  const browser = await pdf.initBrowser();
+  await terminateBrowser(browser);
 }
 main().catch(console.error);
 ```
