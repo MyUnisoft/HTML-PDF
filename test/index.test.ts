@@ -1,43 +1,13 @@
 // Import Node.js Dependencies
 import path from "path";
 import fs from "fs";
+import { pipeline } from "stream/promises";
 
 // Import Internal Dependencies
 import * as compiler from "../src/index";
 
 // CONST
 const file = fs.readFileSync(path.join(__dirname, "fixtures", "sample.html"), "utf-8");
-
-const opts = {
-  persons: [
-    {
-      firstname: "Alice",
-      lastname: "Fortin",
-      salary: 2000
-    },
-    {
-      firstname: "Julienne",
-      lastname: "Chauvin",
-      salary: 2000
-    },
-    {
-      firstname: "Aubin",
-      lastname: "Poissonnier",
-      salary: 2000
-    },
-    {
-      firstname: "Roch",
-      lastname: "Guilmette",
-      salary: 2000
-    },
-    {
-      firstname: "Grégoire",
-      lastname: "Grignon",
-      salary: 2000
-    }
-  ],
-  title: "HELLO WORLD !"
-};
 
 const template = `
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css">
@@ -88,46 +58,40 @@ describe("convert html to pdf", () => {
   });
 
   it("should return a Buffer for a file converted in pdf", async() => {
-    try {
-      const res = await compiler.generatePDF(browser, [{ content: file, options: opts }]);
-      const stream = fs.createWriteStream("./test.pdf");
-      stream.write(res.pdf.buffer);
-      expect(res.pdf.buffer).toBeInstanceOf(Buffer);
+    expect.assertions(1);
+
+    for await (const pdf of compiler.generatePDF(browser, [{ content: file }])) {
+      expect(pdf).toBeInstanceOf(Buffer);
     }
-    catch (error) {
-      throw new Error(error);
-    }
+
+    const writable = fs.createWriteStream("./test.pdf");
+    await pipeline(
+      compiler.generatePDF(browser, [{ content: file }]),
+      writable
+    );
   });
 
   it("should return a Buffer for an url converted in pdf", async() => {
-    try {
-      const res = await compiler.generatePDF(browser, [{ url: "https://nodejs.org/en/" }]);
-      expect(res.pdf.buffer).toBeInstanceOf(Buffer);
-    }
-    catch (error) {
-      throw new Error(error);
+    expect.assertions(1);
+
+    for await (const pdf of compiler.generatePDF(browser, [{ url: "https://nodejs.org/en/" }])) {
+      expect(pdf).toBeInstanceOf(Buffer);
     }
   });
 
   it("should return a Buffer for a HTML converted in pdf", async() => {
-    try {
-      const res = await compiler.generatePDF(browser, [{ content: template }], { scale: 2 });
-      expect(res.pdf.buffer).toBeInstanceOf(Buffer);
-    }
-    catch (error) {
-      throw new Error(error);
+    expect.assertions(1);
+
+    for await (const pdf of compiler.generatePDF(browser, [{ content: template }], { scale: 2 })) {
+      expect(pdf).toBeInstanceOf(Buffer);
     }
   });
 
   it("should return a Buffer for each type of entry converted in pdf", async() => {
-    try {
-      const res = await compiler.generatePDF(browser, [{ content: template }, { url: "https://nodejs.org/en/" }]);
-      for (const pdf of res.pdfs) {
-        expect(pdf.buffer).toBeInstanceOf(Buffer);
-      }
-    }
-    catch (error) {
-      throw new Error(error);
+    expect.assertions(2);
+
+    for await (const pdf of compiler.generatePDF(browser, [{ content: template }, { url: "https://nodejs.org/en/" }])) {
+      expect(pdf).toBeInstanceOf(Buffer);
     }
   });
 
