@@ -1,5 +1,5 @@
 # nHTMLToPDF
-Node lib for converts HTML with dynamic or static content or url to PDF files
+Node lib to converts HTML with property binding or url to PDF files
 
 ## Installation
 ```$ npm install @rossbob/html-to-pdf```
