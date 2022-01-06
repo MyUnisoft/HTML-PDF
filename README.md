@@ -1,8 +1,8 @@
-# nHTMLToPDF
+# HTMLToPDF
 Node lib to converts HTML with property binding or url to PDF files
 
 ## Installation
-```$ npm install @rossbob/html-to-pdf```
+```$ npm install @myunisoft/html-to-pdf```
 
 ## Unit Test
 - Jest
@@ -48,48 +48,14 @@ main().catch(console.error);
 ```ts
 interface pdfFile {
   content?: string,
-  url?: string,
-  options?: {}
-}
-
-More Info [there](https://pptr.dev/#?product=Puppeteer&version=v7.1.0&show=api-pagepdfoptions)
-interface PDFOptions {
-  path?: string,
-  scale?: number,
-  displayHeaderFooter?: boolean,
-  headerTemplate?: string,
-  footerTemplate?: string,
-  printBackground?: boolean,
-  landscape?: boolean,
-  pageRanges?: string,
-  format?: string,
-  width?: string | number,
-  height?: string | number,
-  margin?: {
-    top?: string | number,
-    right?: string | number,
-    bottom?: string | number,
-    left?: string | number,
-  },
-  preferCSSPageSize?: boolean
-}
-
-interface PDF {
-  options?: string,
-  buffer: Buffer
-}
-
-interface genPDFPayload {
-  pdf?: PDF,
-  pdfs?: PDF[],
-  stream?: fs.ReadStream
+  url?: string
 }
 ```
 
 ```js
 async function main() {
   const browser = await initBrowser();
-  const result = await generatePDF(browser, files);
+  const result = Readable.from(generatePDF(browser, [{ content: html.content }], pdfOptions ?? kDefaultOptions));
 }
 main().catch(console.error);
 ```
@@ -103,5 +69,3 @@ async function main() {
 }
 main().catch(console.error);
 ```
-
-### How to use [Zup](https://github.com/mscdex/zup)
