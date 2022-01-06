@@ -6,20 +6,25 @@ Node lib to converts HTML with property binding or url to PDF files
 
 ## Unit Test
 - Jest
-- Coverage : 90%
+- Coverage : 100%
 
 ## Usage
 
 ```js
 async function main() {
   const browser = await initBrowser();
-  const writable = fs.createWriteStream("./test.pdf");
 
   try {
-    await pipeline(
-      compiler.generateDPDF(browser, [{ content: file, options: opts }]),
-      writable
-    );
+    const { pdfs } = await generatePDF(browser, files);
+    const { pdf } = await generatePDF(browser, file);
+
+    const stream = fs.createWriteStream(`./${your_pdf_name}.pdf`);
+
+    stream.write(pdf.buffer); // => create file for the given buffer.
+    
+    for (let pdf of pdfs) {
+      stream.write(pdf.buffer); // => create file for each given buffer
+    }
   }
   finally {
     await terminateBrowser(browser);
@@ -50,17 +55,7 @@ interface pdfFile {
 ```js
 async function main() {
   const browser = await initBrowser();
-
-  try {
-    for await (const pdf of compiler.generatePDF(browser, [{ content: template }, { url: "https://nodejs.org/en/" }])) {
-      console.log(pdf);
-    }
-  } 
-  finally {
-    await terminateBrowser(browser);
-  }
-
-  const result = await generatePDF(browser, files);
+  const result = Readable.from(generatePDF(browser, [{ content: html.content }], pdfOptions ?? kDefaultOptions));
 }
 main().catch(console.error);
 ```
