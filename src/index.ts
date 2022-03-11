@@ -2,8 +2,14 @@
 import puppeteer, { Browser, PDFOptions } from "puppeteer";
 
 // Export Third-party Types
-export type PuppeteerPDFOptions = PDFOptions;
+export type PuppeteerPDFOptions = PDFOptions & { paginationOffset?: number };
 export type PuppeteerBrowser = Browser;
+
+// CONSTANTS
+const kEmptyPage = `<style>
+      .empty-page { page-break-after: always; visibility: hidden }
+    </style>
+    <div class="empty-page">no content</div>`;
 
 /**
  * @author HALLAERT Nicolas
@@ -28,8 +34,10 @@ export interface pdfFile {
 export async function* generatePDF(
   browser: Browser,
   files: pdfFile[],
-  options?: PDFOptions
-): AsyncIterableIterator<Buffer> {
+  options?: PuppeteerPDFOptions
+  ): AsyncIterableIterator<Buffer> {
+  const { paginationOffset = 0, ...pdfOptions } = options ?? {};
+
   if (!browser) {
     // eslint-disable-next-line no-param-reassign
     browser = await puppeteer.launch();
@@ -38,6 +46,10 @@ export async function* generatePDF(
 
   for (const file of files) {
     if (file.content) {
+      for (let pageNumber = 0; pageNumber < paginationOffset; pageNumber++) {
+        file.content = kEmptyPage + file.content;
+      }
+
       await page.setContent(file.content, { waitUntil: "networkidle0" });
     }
     else if (file.url) {
@@ -47,7 +59,10 @@ export async function* generatePDF(
       continue;
     }
 
-    yield await page.pdf(options);
+    yield await page.pdf(paginationOffset ?
+      Object.assign({}, { pageRanges: `${paginationOffset + 1}-` }, pdfOptions) :
+      pdfOptions
+    );
   }
 }
 
