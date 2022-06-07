@@ -1,5 +1,11 @@
 // Import Third-party Dependencies Dependencies
-import puppeteer, { Browser, PDFOptions } from "puppeteer";
+import puppeteer, {
+  Browser,
+  LaunchOptions,
+  BrowserLaunchArgumentOptions,
+  BrowserConnectOptions,
+  Product,
+  PDFOptions } from "puppeteer";
 
 // Export Third-party Types
 export type PuppeteerPDFOptions = PDFOptions & { paginationOffset?: number };
@@ -11,12 +17,19 @@ const kEmptyPage = `<style>
     </style>
     <div class="empty-page">no content</div>`;
 
+export type PuppeteerLaunchOptions = LaunchOptions & BrowserLaunchArgumentOptions & BrowserConnectOptions & {
+    product?: Product;
+    extraPrefsFirefox?: Record<string, unknown>;
+}
+
 /**
- * @author HALLAERT Nicolas
+ *
+ * @export
+ * @param {PuppeteerLaunchOptions} options
  * @returns {Promise<Browser>}
  */
-export async function initBrowser(): Promise<Browser> {
-  return await puppeteer.launch();
+export async function initBrowser(options: PuppeteerLaunchOptions = {}): Promise<Browser> {
+  return await puppeteer.launch(options);
 }
 
 export interface pdfFile {
