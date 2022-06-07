@@ -28,9 +28,14 @@ async function main() {
 main().catch(console.error);
 ```
 
-### initBrowser(): Promise<Browser>
+### initBrowser(options: PuppeteerLaunchOptions): Promise<Browser>
 
 ```js
+type PuppeteerLaunchOptions = LaunchOptions & BrowserLaunchArgumentOptions & BrowserConnectOptions & {
+    product?: Product;
+    extraPrefsFirefox?: Record<string, unknown>;
+}
+
 async function main() {
   const browser = await initBrowser();
 }
