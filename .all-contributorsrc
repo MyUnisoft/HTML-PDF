@@ -1,0 +1,24 @@
+{
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": false,
+  "contributors": [
+    {
+      "login": "Rossb0b",
+      "name": "Nicolas Hallaert",
+      "avatar_url": "https://avatars.githubusercontent.com/u/39910164?v=4",
+      "profile": "https://www.linkedin.com/in/nicolas-hallaert/",
+      "contributions": [
+        "code"
+      ]
+    }
+  ],
+  "contributorsPerLine": 7,
+  "projectName": "HTML-PDF",
+  "projectOwner": "MyUnisoft",
+  "repoType": "github",
+  "repoHost": "https://github.com",
+  "skipCi": true
+}
