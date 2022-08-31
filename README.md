@@ -83,7 +83,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 <!-- markdownlint-disable -->
 <table>
   <tr>
-    <td align="center"><a href="https://www.linkedin.com/in/nicolas-hallaert/"><img src="https://avatars.githubusercontent.com/u/39910164?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Nicolas Hallaert</b></sub></a><br /><a href="https://github.com/MyUnisoft/HTML-PDF/commits?author=Rossb0b" title="Code">💻</a></td>
+    <td align="center"><a href="https://www.linkedin.com/in/nicolas-hallaert/"><img src="https://avatars.githubusercontent.com/u/39910164?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Nicolas Hallaert</b></sub></a><br /><a href="https://github.com/MyUnisoft/HTML-PDF/commits?author=Rossb0b" title="Code">💻</a> <a href="https://github.com/MyUnisoft/HTML-PDF/commits?author=Rossb0b" title="Documentation">📖</a></td>
   </tr>
 </table>
 
