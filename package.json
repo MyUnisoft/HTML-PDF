@@ -26,9 +26,6 @@
   ],
   "author": "HALLAERT Nicolas <nicolas.hallaert.pro@gmail.com>",
   "license": "MIT",
-  "dependencies": {
-    "puppeteer": "^13.0.0"
-  },
   "devDependencies": {
     "@types/jest": "^27.0.3",
     "jest": "^27.4.4",
@@ -41,5 +38,8 @@
   "homepage": "https://github.com/MyUnisoft/HTML-PDF#readme",
   "directories": {
     "test": "test"
+  },
+  "dependencies": {
+    "puppeteer": "^17.0.0"
   }
 }
