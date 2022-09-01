@@ -13,11 +13,11 @@
 </p>
 
 ## 🚧 Requirements
----
+
 - [Node.js](https://nodejs.org/en/) version 14 or higher
 
 ## 🚀 Getting Started
----
+
 This package is available in the Node Package Repository and can be easily installed with [npm](https://doc.npmjs.com/getting-started/what-is-npm) or [yarn](https://yarnpkg.com)
 
 ```bash
@@ -27,7 +27,7 @@ $ yarn add @myunisoft/html-to-pdf
 ```
 
 ## 📚 Usage
----
+
 ```js
 async function main() {
   const browser = await initBrowser();
@@ -47,7 +47,6 @@ main().catch(console.error);
 ```
 
 ## API
----
 
 ### initBrowser(options: PuppeteerLaunchOptions): Promise<Browser>
 
