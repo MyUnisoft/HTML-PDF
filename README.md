@@ -48,22 +48,36 @@ main().catch(console.error);
 
 ## API
 
-### initBrowser(options: PuppeteerLaunchOptions): Promise<Browser>
+<details>
+<summary>initBrowser(options?: PuppeteerLaunchOptions): Promise< Browser ></summary>
 
 ```js
+import { initBrowser } from "@myunisoft/html-to-pdf";
+
+const browser = await initBrowser();
+```
+
+Options payload is described by the following TypeScript interface:
+```ts
+import {
+  LaunchOptions,
+  BrowserLaunchArgumentOptions,
+  BrowserConnectOptions,
+  Product
+} from "puppeteer";
+
 type PuppeteerLaunchOptions = LaunchOptions & BrowserLaunchArgumentOptions & BrowserConnectOptions & {
     product?: Product;
     extraPrefsFirefox?: Record<string, unknown>;
 }
-
-async function main() {
-  const browser = await initBrowser();
-}
-main().catch(console.error);
 ```
 
-### generatePDF(browser: Browser, files: pdfFile[], options?: PuppeteerPDFOptions): Promise<genPDFPayload>
+</details>
 
+<details>
+<summary>generatePDF(browser: Browser, files: pdfFile[], options?: PuppeteerPDFOptions): AsyncIterableIterator< Buffer ></summary>
+
+`files` and `options` arguments are described with the following TypeScript interface/type:
 ```ts
 interface pdfFile {
   content?: string,
@@ -74,22 +88,38 @@ type PuppeteerPDFOptions = PDFOptions & { paginationOffset?: number };
 ```
 
 ```js
-async function main() {
-  const browser = await initBrowser();
-  const readable = Readable.from(generatePDF(browser, [{ content: html.content }], pdfOptions));
-}
-main().catch(console.error);
+import * as pdf from "@myunisoft/html-to-pdf";
+
+const browser = await pdf.initBrowser();
+
+const pdfOptions = {};
+const content = "..HTML HERE..";
+
+const readable = Readable.from(
+  pdf.generatePDF(browser, [{ content }], pdfOptions)
+);
+// Do the work with readable (pipe to an http response for example).
 ```
 
-### terminateBrowser(browser: Browser): Promise<void>
+</details>
+
+<details>
+<summary>terminateBrowser(browser: Browser): Promise< void ></summary>
 
 ```js
-async function main() {
-  const browser = await pdf.initBrowser();
-  await terminateBrowser(browser);
+import * as pdf from "@myunisoft/html-to-pdf";
+
+const browser = await pdf.initBrowser();
+
+try {
+  // DO THE WORK HERE
 }
-main().catch(console.error);
+finally {
+  await pdf.terminateBrowser(browser);
+}
 ```
+
+</details>
 
 ## Contributors ✨
 
@@ -114,3 +144,6 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 <!-- prettier-ignore-end -->
 
 <!-- ALL-CONTRIBUTORS-LIST:END -->
+
+## License
+MIT
