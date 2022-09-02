@@ -48,7 +48,7 @@ export async function* generatePDF(
   browser: Browser,
   files: pdfFile[],
   options?: PuppeteerPDFOptions
-  ): AsyncIterableIterator<Buffer> {
+): AsyncIterableIterator<Buffer> {
   const { paginationOffset = 0, ...pdfOptions } = options ?? {};
 
   if (!browser) {
